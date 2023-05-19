@@ -20,6 +20,7 @@ public class BaseEntity {
         this.poxY = poxY;
         this.speedX = speedX;
         this.speedY = speedY;
+        MainGame.AddItem(getEntity());
     }
 
     //Sprite method

@@ -12,11 +12,15 @@ import java.io.IOException;
 
 public class MainGame {
     public final static int SCREENWIDTH= (int) Screen.getPrimary().getBounds().getWidth() ;
-    public final static int GAMEWIDTH= SCREENWIDTH/4;
-    public final static int SCREENHEIGHT= (int) Screen.getPrimary().getBounds().getWidth() ;
-    public final static int GAMEHEIGHT= SCREENHEIGHT/2;
+    public final static int GAMEWIDTH= SCREENWIDTH/2;
+    public final static int SCREENHEIGHT= (int) Screen.getPrimary().getBounds().getHeight() ;
+    public final static int GAMEHEIGHT= SCREENHEIGHT;
 
     public Stage stage;
+    //FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+    public static Pane root = new Pane();
+    //Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+    public Scene scene = new Scene(root, GAMEWIDTH, GAMEHEIGHT);
     public MainGame(Stage stage) {
     this.stage = stage;
     stage.setResizable(false);
@@ -25,14 +29,17 @@ public class MainGame {
     }
 
     public void startGame() throws IOException {
-        //FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Pane root = new Pane();
-        //Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        Scene scene = new Scene(root, GAMEWIDTH, GAMEHEIGHT);
+
+        System.out.println(SCREENWIDTH);
+        System.out.println(SCREENHEIGHT);
         Rectangle test = new Rectangle(20,20);
         root.getChildren().add(test);
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
+    }
+
+    public static void AddItem(Rectangle item){
+        root.getChildren().add(item);
     }
 }
