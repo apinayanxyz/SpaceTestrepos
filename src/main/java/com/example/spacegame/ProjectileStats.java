@@ -10,13 +10,16 @@ public class ProjectileStats {
 
     //Added effects
     private boolean isTripled;
+    private static float fireCooldown=3;
+
+    //Methods
     public void setSpeed(int speed) {
         this.speed = speed;
     }
-
     public void setSize(int size) {
         this.size = size;
     }
-
+    public static float getFireCooldown() { return fireCooldown; }
+    public void setFireCooldown(float fireCooldown) { this.fireCooldown = fireCooldown; }
 
 }
