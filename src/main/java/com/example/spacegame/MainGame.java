@@ -25,6 +25,8 @@ public class MainGame {
     //Scene scene = new Scene(fxmlLoader.load(), 320, 240);
     public Scene scene = new Scene(root, GAMEWIDTH, GAMEHEIGHT);
     public Player player = new Player(GAMEWIDTH/2 -25, GAMEHEIGHT/2);
+
+    public Projectile bullet = new Projectile(player.getBulletSpawnX()-ProjectileStats.size/2,player.getPosY(),-1);
     public MainGame(Stage stage) {
     this.stage = stage;
     stage.setResizable(false);
@@ -56,6 +58,7 @@ public class MainGame {
             @Override
             public void handle(long now){
                 player.update();
+                bullet.update();
                 //System.out.println(player.getPosX());
             }
         }.start();
@@ -64,4 +67,5 @@ public class MainGame {
     public static void AddItem(Rectangle item){
         root.getChildren().add(item);
     }
+    public static void RemoveItem(Rectangle item){ root.getChildren().remove(item); }
 }

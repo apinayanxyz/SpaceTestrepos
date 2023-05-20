@@ -3,7 +3,7 @@ package com.example.spacegame;
 public class ProjectileStats {
 
     //Projectile stats
-    private static int initialSpeed = 5;
+    private static int initialSpeed = 1;
     public static int speed = initialSpeed;
     private static int initialSize = 10;
     public static int size = initialSize;

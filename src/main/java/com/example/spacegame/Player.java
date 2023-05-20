@@ -3,6 +3,8 @@ package com.example.spacegame;
 public class Player extends Shootables{
     public int playerSize;
     public int playerSpeed;
+
+    private int bulletSpawnX;
     public int health;
 
     public int getPlayerSize() {
@@ -13,11 +15,21 @@ public class Player extends Shootables{
         super(50, 50, posX, poxY, 5, 5);
         this.playerSize = 50;
         this.playerSpeed = 5;
+        this.health = 30;
+        bulletSpawnX = posX + playerSize/2;
     }
 
     public void setPlayerSpeed(int playerSpeed) {
         this.playerSpeed = playerSpeed;
     }
 
+    public int getBulletSpawnX() {
+        return bulletSpawnX;
+    }
 
+    @Override
+    public void update(){
+        bulletSpawnX = getPosX() + playerSize/2;
+        super.update();
+    }
 }
