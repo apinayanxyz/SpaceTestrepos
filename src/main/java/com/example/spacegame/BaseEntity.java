@@ -9,7 +9,7 @@ public class BaseEntity {
     private int sizeX;
     private int sizeY;
     private int posX;
-    private int poxY;
+    private int posY;
     private int speedX;
     private int speedY;
 
@@ -17,9 +17,10 @@ public class BaseEntity {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.posX = posX;
-        this.poxY = poxY;
+        this.posY = poxY;
         this.speedX = speedX;
         this.speedY = speedY;
+        Entity = new Rectangle(posX, poxY, sizeY, sizeX);
         MainGame.AddItem(getEntity());
     }
 
@@ -29,7 +30,8 @@ public class BaseEntity {
     //Move method
 
     public void update(){
-
+        Entity.setX(posX);
+        Entity.setY(posY);
     }
 
     public void setImage(Image image){
@@ -56,14 +58,14 @@ public class BaseEntity {
     /*
      * Returns the Y value of the item
      */
-    public int getPoxY() {
-        return poxY;
+    public int getPosY() {
+        return posY;
     }
     /*
      * Sets the Y value of the item
      */
-    public void setPoxY(int poxY) {
-        this.poxY = poxY;
+    public void setPosY(int posY) {
+        this.posY = posY;
     }
     /*
      * Returns the X speed value of the item

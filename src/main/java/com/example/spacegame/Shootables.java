@@ -30,7 +30,7 @@ public class Shootables extends BaseEntity{
 
     public void Fire(int direction){
         if (!fired){
-            Projectile bullet = new Projectile(Shootables.super.getPosX(), Shootables.super.getPoxY(),direction);
+            Projectile bullet = new Projectile(Shootables.super.getPosX(), Shootables.super.getPosY(),direction);
             fired=true;
             cooldown.playFromStart();
         }

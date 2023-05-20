@@ -5,9 +5,13 @@ public class Player extends Shootables{
     public int playerSpeed;
     public int health;
 
+    public int getPlayerSize() {
+        return playerSize;
+    }
+
     public Player(int posX, int poxY) {
-        super(10, 10, posX, poxY, 5, 5);
-        this.playerSize = 10;
+        super(50, 50, posX, poxY, 5, 5);
+        this.playerSize = 50;
         this.playerSpeed = 5;
     }
 
