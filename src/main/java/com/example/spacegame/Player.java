@@ -27,4 +27,8 @@ public class Player extends Shootables{
         bulletSpawnX = getPosX() + playerSize/2;
         super.Update();
     }
+
+    public void hit(){
+        health--;
+    }
 }
