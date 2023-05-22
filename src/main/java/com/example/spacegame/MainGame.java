@@ -58,6 +58,10 @@ public class MainGame {
         startGameLoop();
     }
     public NormalEnemies test = new NormalEnemies(player.getPosX(), player.getPosY()-500,false );
+    
+    public int enemycount = 0;
+    public int destroyed = 0;
+    public int waveNum;
     private void startGameLoop() {
         new AnimationTimer(){
             @Override
@@ -67,6 +71,11 @@ public class MainGame {
                     test.ifGone();
                     test.update();
                 }
+                if (enemycount == destroyed){
+                    waveNum = 1;
+                    CreateWave();
+                    System.out.printf("a");
+                }
 
                 for (Projectile projectile:projectiles) {
                     projectile.update();
@@ -75,10 +84,15 @@ public class MainGame {
                         test.hit(projectile);
                         RemoveItem(projectile.getEntity());
                     }
+                    
                 }
 
             }
         }.start();
+    }
+
+    private void CreateWave() {
+        enemycount++;
     }
 
     public static void AddItem(Rectangle item){root.getChildren().add(item);}
