@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import javafx.scene.Group;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MainGame {
     public final static int SCREENWIDTH= (int) Screen.getPrimary().getBounds().getWidth() ;
@@ -24,9 +25,9 @@ public class MainGame {
     public static Pane root = new Pane();
     //Scene scene = new Scene(fxmlLoader.load(), 320, 240);
     public Scene scene = new Scene(root, GAMEWIDTH, GAMEHEIGHT);
-    public Player player = new Player(GAMEWIDTH/2 -25, GAMEHEIGHT/2);
-
-    public Projectile bullet = new Projectile(player.getBulletSpawnX()-ProjectileStats.size/2,player.getPosY(),-1);
+    public static Player player = new Player(GAMEWIDTH/2 -25, GAMEHEIGHT/2);
+    public static ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
+    public static ArrayList<BaseEntity> enemies = new ArrayList<BaseEntity>();
     public MainGame(Stage stage) {
     this.stage = stage;
     stage.setResizable(false);
@@ -46,8 +47,9 @@ public class MainGame {
             KeyCode code = e.getCode();
             Mechanics.movePlayer(code, player);
         });
-        scene.setOnKeyReleased((KeyEvent event) -> {
-
+        scene.setOnKeyReleased((KeyEvent e) -> {
+            KeyCode code = e.getCode();
+            Mechanics.stopMovement(code, player);
         });
         stage.setTitle("Hello!");
         stage.setScene(scene);
@@ -61,14 +63,18 @@ public class MainGame {
             @Override
             public void handle(long now){
                 player.update();
-                bullet.update();
-                //System.out.println(player.getPosX());
+                for (Projectile projectile:projectiles) {
+                    projectile.update();
+                }
             }
         }.start();
     }
 
-    public static void AddItem(Rectangle item){
-        root.getChildren().add(item);
+    public static void AddItem(Rectangle item){root.getChildren().add(item);}
+
+    public static void AddProjectile(){
+        Projectile tempProj = new Projectile(player.getBulletSpawnX(), player.getPosY(),-1);
+        projectiles.add(tempProj);
     }
     public static void RemoveItem(Rectangle item){ root.getChildren().remove(item); }
 }

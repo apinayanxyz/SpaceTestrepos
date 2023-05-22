@@ -12,7 +12,7 @@ public class Player extends Shootables{
     }
 
     public Player(int posX, int poxY) {
-        super(50, 50, posX, poxY, 5, 5);
+        super(50, 50, posX, poxY, 5, 5,-1);
         this.playerSize = 50;
         this.playerSpeed = 5;
         this.health = 30;
@@ -25,6 +25,6 @@ public class Player extends Shootables{
     @Override
     public void update(){
         bulletSpawnX = getPosX() + playerSize/2;
-        super.update();
+        super.Update();
     }
 }

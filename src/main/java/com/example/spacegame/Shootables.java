@@ -9,18 +9,22 @@ import javafx.util.Duration;
 public class Shootables extends BaseEntity{
 
     private boolean fired;
+    private boolean firing;
     private Timeline cooldown = new Timeline();
+
+    private int direction;
     private float timeSeconds = 0;
-    public Shootables(int sizeX, int sizeY, int posX, int poxY, int speedX, int speedY) {
+    public Shootables(int sizeX, int sizeY, int posX, int poxY, int speedX, int speedY, int direction) {
         super(sizeX, sizeY, posX, poxY, speedX, speedY);
-        cooldown.setCycleCount(1);
+        this.direction = direction;
+        cooldown.setCycleCount(3);
         cooldown.getKeyFrames().add(
-                new KeyFrame(Duration.seconds(1),
+                new KeyFrame(Duration.seconds(ProjectileStats.getFireCooldown()),
                         new EventHandler() {
                             @Override
                             public void handle(Event event) {
                                 timeSeconds++;
-                                if (timeSeconds >= ProjectileStats.getFireCooldown()) {
+                                if (timeSeconds >= 1) {
                                     timeSeconds = 0;
                                     fired=false;
                                 }
@@ -30,11 +34,25 @@ public class Shootables extends BaseEntity{
 
     public void Fire(int direction){
         if (!fired){
-            Projectile bullet = new Projectile(Shootables.super.getPosX(), Shootables.super.getPosY(),direction);
+            MainGame.AddProjectile();
             fired=true;
             cooldown.playFromStart();
         }
 
     }
-//Shoot
+    public void Update(){
+        if (firing) {
+            Fire(direction);
+        }
+        super.update();
+    }
+
+    public boolean isFiring() {
+        return firing;
+    }
+
+    public void setFiring(boolean firing) {
+        this.firing = firing;
+    }
+    //Shoot
 }

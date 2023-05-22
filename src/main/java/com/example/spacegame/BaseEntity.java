@@ -34,6 +34,7 @@ public class BaseEntity {
     //Move method
 
     public void update(){
+        moveAll();
         Entity.setX(posX);
         Entity.setY(posY);
     }
