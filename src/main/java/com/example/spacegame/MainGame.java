@@ -57,15 +57,21 @@ public class MainGame {
 
         startGameLoop();
     }
-
+    public NormalEnemies test = new NormalEnemies(player.getPosX(), player.getPosY()-300,false );
     private void startGameLoop() {
         new AnimationTimer(){
             @Override
             public void handle(long now){
                 player.update();
+                test.update();
                 for (Projectile projectile:projectiles) {
                     projectile.update();
+                    if (projectile.getEntity().getBoundsInParent().intersects(test.getEntity().getBoundsInParent())){
+                        RemoveItem(test.getEntity());
+                        RemoveItem(projectile.getEntity());
+                    }
                 }
+
             }
         }.start();
     }
