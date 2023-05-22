@@ -18,11 +18,6 @@ public class Player extends Shootables{
         this.health = 30;
         bulletSpawnX = posX + playerSize/2;
     }
-
-    public void setPlayerSpeed(int playerSpeed) {
-        this.playerSpeed = playerSpeed;
-    }
-
     public int getBulletSpawnX() {
         return bulletSpawnX;
     }

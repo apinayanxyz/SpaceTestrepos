@@ -12,6 +12,10 @@ public class BaseEntity {
     private int posY;
     private int speedX;
     private int speedY;
+    private boolean left = false;
+    private boolean right = false;
+    private boolean up = false;
+    private boolean down = false;
 
     public BaseEntity(int sizeX, int sizeY, int posX, int poxY, int speedX, int speedY) {
         this.sizeX = sizeX;
@@ -32,6 +36,29 @@ public class BaseEntity {
     public void update(){
         Entity.setX(posX);
         Entity.setY(posY);
+    }
+
+    public void moveAll(){
+        if (isUp()) {
+            moveY(-getSpeedY());
+        }
+        else if (isDown()) {
+            moveY(+getSpeedY());
+        }
+        if (isLeft()) {
+            moveX(-getSpeedX());
+        }
+        else if (isRight()) {
+            moveX(+getSpeedX());
+        }
+    }
+    public void moveX(int speed){
+        posX = posX+ speed;
+        setPosX(posX);
+    }
+    public void moveY(int speed){
+        posY = posY + speed;
+        setPosY(posY);
     }
 
     public void setImage(Image image){
@@ -90,5 +117,37 @@ public class BaseEntity {
      */
     public void setSpeedY(int speedY) {
         this.speedY = speedY;
+    }
+
+    public boolean isLeft() {
+        return left;
+    }
+
+    public void setLeft(boolean left) {
+        this.left = left;
+    }
+
+    public boolean isRight() {
+        return right;
+    }
+
+    public void setRight(boolean right) {
+        this.right = right;
+    }
+
+    public boolean isUp() {
+        return up;
+    }
+
+    public void setUp(boolean up) {
+        this.up = up;
+    }
+
+    public boolean isDown() {
+        return down;
+    }
+
+    public void setDown(boolean down) {
+        this.down = down;
     }
 }

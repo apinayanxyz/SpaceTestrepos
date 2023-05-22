@@ -10,7 +10,7 @@ public class Projectile extends BaseEntity{
 
     @Override
     public void update(){
-        Mechanics.moveY(this ,super.getPosY(),super.getSpeedY()*direction);
+        super.moveY(super.getSpeedY()*direction);
         super.update();
     }
 }

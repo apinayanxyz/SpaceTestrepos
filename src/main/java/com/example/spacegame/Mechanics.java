@@ -15,32 +15,47 @@ public class Mechanics {
 
     public static void movePlayer(KeyCode code, Player player){
         if (code.equals(W)){
+            System.out.println("A");
             if (player.getPosY()>0){
-                moveY(player,player.getPosY(),-player.playerSpeed);
+                player.setUp(true);
+                player.setDown(false);
             }
         }
         if (code.equals(A)){
             if (player.getPosX()>0){
-                moveX(player,player.getPosX(),-player.playerSpeed);
+                player.setLeft(true);
+                player.setRight(false);
             }
         }
         if (code.equals(D)){
             if (player.getPosX()<MainGame.GAMEWIDTH-player.getPlayerSize()){
-                moveX(player,player.getPosX(),player.playerSpeed);
+                player.setRight(true);
+                player.setLeft(false);
             }
         }
         if (code.equals(S)){
             if (player.getPosY()<MainGame.GAMEHEIGHT-player.getPlayerSize()){
-                moveY(player,player.getPosY(),player.playerSpeed);
+                player.setDown(true);
+                player.setUp(false);
             }
         }
     }
-    public static void moveX(BaseEntity entity, int position, int displacement){
-        position = position + displacement;
-        entity.setPosX(position);
+
+    public static void stopMovement(KeyCode code, Player player){
+        if (code == A) {
+            player.setLeft(false);
+
+        } else if (code == D) {
+            player.setRight(false);
+        }
+        if (code == W) {
+            player.setUp(false);
+        } else if (code == S) {
+            player.setDown(false);
+        }
+        /*if (event.getCode() == SPACE) {
+            space = false;
+        }*/
     }
-    public static void moveY(BaseEntity entity, int position, int displacement){
-        position = position + displacement;
-        entity.setPosY(position);
-    }
+
 }

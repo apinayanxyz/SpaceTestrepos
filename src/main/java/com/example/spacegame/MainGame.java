@@ -46,6 +46,9 @@ public class MainGame {
             KeyCode code = e.getCode();
             Mechanics.movePlayer(code, player);
         });
+        scene.setOnKeyReleased((KeyEvent event) -> {
+
+        });
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
