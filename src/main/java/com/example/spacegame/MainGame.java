@@ -1,6 +1,10 @@
 package com.example.spacegame;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -10,16 +14,21 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.Group;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainGame {
+
+    //
     public final static int SCREENWIDTH= (int) Screen.getPrimary().getBounds().getWidth() ;
     public final static int GAMEWIDTH= SCREENWIDTH/2;
     public final static int SCREENHEIGHT= (int) Screen.getPrimary().getBounds().getHeight() ;
     public final static int GAMEHEIGHT= SCREENHEIGHT;
 
+
+    // Game items
     public Stage stage;
     //FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
     public static Pane root = new Pane();
@@ -28,6 +37,13 @@ public class MainGame {
     public static Player player = new Player(GAMEWIDTH/2 -25, GAMEHEIGHT/2);
     public static ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
     public static ArrayList<BaseEntity> enemies = new ArrayList<BaseEntity>();
+
+
+    //Miscellanous
+
+    private Timeline roundCooldown = new Timeline();
+    public int timeSeconds = 0;
+    public boolean roundBreak = false;
     public MainGame(Stage stage) {
     this.stage = stage;
     stage.setResizable(false);
@@ -37,6 +53,19 @@ public class MainGame {
 
     public void startGame() throws IOException {
 
+        roundCooldown.setCycleCount(1);
+        roundCooldown.getKeyFrames().add(
+                new KeyFrame(Duration.seconds(5),
+                        new EventHandler() {
+                            @Override
+                            public void handle(Event event) {
+                                timeSeconds++;
+                                if (timeSeconds == 1) {
+                                    timeSeconds = 0;
+                                    roundBreak = false;
+                                }
+                            }
+                        }));
         System.out.println(SCREENWIDTH);
         System.out.println(SCREENHEIGHT);
         Rectangle test = new Rectangle(20,20);
@@ -62,17 +91,36 @@ public class MainGame {
     public int enemyCount = 0;
     public int destroyed = 0;
     public int waveNum;
+
+    public int roundCount = 1 ;
+
+    public int roundWaveCount = 0;
+    public int roundWaveMax = 0;
     private void startGameLoop() {
         new AnimationTimer(){
             @Override
             public void handle(long now){
                 player.update();
-                System.out.println("count:"+enemyCount);
-                System.out.println("destroyed:"+destroyed);
-                if (enemyCount == destroyed){
-                    waveNum = 1;
-                    CreateWave();
-                    System.out.printf("a");
+                System.out.println("Round Wave count:" + roundWaveCount);
+                System.out.println("Round max:" + roundWaveMax);
+                System.out.println("count:" + enemyCount);
+                System.out.println("destroyed:" + destroyed);
+                if (!roundBreak) {
+                    if (roundWaveMax < 5) {
+                        if (enemyCount == destroyed) {
+                            if (roundWaveCount <= roundWaveMax) {
+                                waveNum = 1;
+                                CreateWave();
+                                System.out.printf("a");
+                                roundWaveCount++;
+                            } else {
+                                roundWaveCount = 0;
+                                roundWaveMax++;
+                                roundBreak = true;
+                                roundCooldown.playFromStart();
+                            }
+                        }
+                    }
                 }
                 for (NormalEnemies enemy : enemyList) {
                     if (enemy.isAlive()){
@@ -84,12 +132,14 @@ public class MainGame {
                     projectile.update();
                     for (NormalEnemies enemy : enemyList) {
                         if (projectile.getEntity().getBoundsInParent().intersects(enemy.getEntity().getBoundsInParent())){
-                            if (enemy.isAlive()){
-                                enemy.hit(projectile);
-                                RemoveItem(projectile.getEntity());
-                                destroyed++;
+                            if (!projectile.isHasShot()) {
+                                if (enemy.isAlive()) {
+                                    enemy.hit(projectile);
+                                    projectile.setHasShot(true);
+                                    RemoveItem(projectile.getEntity());
+                                    destroyed++;
+                                }
                             }
-
                         }
                     }
                     
@@ -101,7 +151,7 @@ public class MainGame {
 
     private void CreateWave() {
         for (int i = 0; i < 5; i++) {
-            NormalEnemies test = new NormalEnemies((GAMEWIDTH/6) * (i+1), 200,false );
+            NormalEnemies test = new NormalEnemies((GAMEWIDTH/6) * (i+1), -50,false );
             enemyList.add(test);
             enemyCount = enemyCount + 1;
         }
