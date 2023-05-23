@@ -1,6 +1,7 @@
 package com.example.spacegame;
 
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
@@ -66,6 +67,7 @@ public class BaseEntity {
     }
 
     public void setImage(Image image){
+
         Entity.setFill(new ImagePattern(image));
     }
     /*
