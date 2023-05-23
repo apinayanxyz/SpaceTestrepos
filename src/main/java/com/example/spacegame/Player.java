@@ -18,10 +18,7 @@ public class Player extends Shootables{
         this.playerSize = 50;
         this.playerSpeed = 5;
         this.health = 30;
-        //super.setImage(new Image(getClass().getResourceAsStream("Player.png")));
-        //super.setImage(new Image("https://github.com/apinayanxyz/SpaceTestrepos/blob/master/src/main/java/com/example/spacegame/Player.png"));
-        //super.setImage(new Image("Player"));C:\Users\abina\IdeaProjects\SpaceTestrepos\src\main\java\com\example\spacegame
-        super.setImage(new Image(HelloApplication.class.getResourceAsStream("SpaceTestrepos/src/main/java/com/spacegame/Player.png")));
+        super.setImage(new Image("file:Images/Player.png"));
         bulletSpawnX = posX + playerSize/2;
     }
     public int getBulletSpawnX() {
