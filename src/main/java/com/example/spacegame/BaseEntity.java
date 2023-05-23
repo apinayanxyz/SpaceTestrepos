@@ -4,6 +4,8 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
+import static javafx.scene.paint.Color.WHITE;
+
 public class BaseEntity {
     private Rectangle Entity;
     private int sizeX;
@@ -25,6 +27,7 @@ public class BaseEntity {
         this.speedX = speedX;
         this.speedY = speedY;
         Entity = new Rectangle(posX, poxY, sizeY, sizeX);
+        Entity.setFill(WHITE);
         MainGame.AddItem(getEntity());
     }
 

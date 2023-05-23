@@ -18,6 +18,9 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
+
+import static javafx.scene.paint.Color.BLACK;
 
 public class MainGame {
 
@@ -82,6 +85,7 @@ public class MainGame {
         });
         stage.setTitle("Hello!");
         stage.setScene(scene);
+        scene.setFill(BLACK);
         stage.show();
 
         startGameLoop();
@@ -101,10 +105,10 @@ public class MainGame {
             @Override
             public void handle(long now){
                 player.update();
-                System.out.println("Round Wave count:" + roundWaveCount);
+                /*System.out.println("Round Wave count:" + roundWaveCount);
                 System.out.println("Round max:" + roundWaveMax);
                 System.out.println("count:" + enemyCount);
-                System.out.println("destroyed:" + destroyed);
+                System.out.println("destroyed:" + destroyed);*/
                 if (!roundBreak) {
                     if (roundWaveMax < 5) {
                         if (enemyCount == destroyed) {
@@ -150,11 +154,38 @@ public class MainGame {
     }
 
     private void CreateWave() {
-        for (int i = 0; i < 5; i++) {
-            NormalEnemies test = new NormalEnemies((GAMEWIDTH/6) * (i+1), -50,false );
-            enemyList.add(test);
-            enemyCount = enemyCount + 1;
+        Random rand = new Random();
+        int randNum = rand.nextInt(5)+1;
+        switch (randNum) {
+            case 1:
+                for (int i = 1; i < 6; i++) {
+                    NormalEnemies test = new NormalEnemies((GAMEWIDTH / 6) * (i), -50, false);
+                    enemyList.add(test);
+                    enemyCount = enemyCount + 1;
+                }
+                break;
+            case 2:
+                for (int i = 1; i < 6; i++) {
+                    NormalEnemies test;
+                    if (i>1){
+                        test = new NormalEnemies((GAMEWIDTH / 6) * (i), -50, true , i % ((i/2)*2) );
+                    }
+                    else {
+                        test = new NormalEnemies((GAMEWIDTH / 6) * (i), -50, true , i);
+                    }
+                    enemyList.add(test);
+                    enemyCount = enemyCount + 1;
+                }
+                break;
+            case 3:
+                for (int i = 1; i < 6; i++) {
+                    NormalEnemies test = new NormalEnemies((GAMEWIDTH / 6) * (i), -50, true );
+                    enemyList.add(test);
+                    enemyCount = enemyCount + 1;
+                }
+                break;
         }
+
 
     }
 

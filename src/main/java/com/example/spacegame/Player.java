@@ -1,5 +1,7 @@
 package com.example.spacegame;
 
+import javafx.scene.image.Image;
+
 public class Player extends Shootables{
     public int playerSize;
     public int playerSpeed;
@@ -16,6 +18,8 @@ public class Player extends Shootables{
         this.playerSize = 50;
         this.playerSpeed = 5;
         this.health = 30;
+        //super.setImage(new Image(getClass().getResourceAsStream("Player.png")));
+
         bulletSpawnX = posX + playerSize/2;
     }
     public int getBulletSpawnX() {
