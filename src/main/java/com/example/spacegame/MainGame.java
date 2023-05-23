@@ -57,9 +57,9 @@ public class MainGame {
 
         startGameLoop();
     }
-    public NormalEnemies test = new NormalEnemies(player.getPosX(), player.getPosY()-500,false );
-    
-    public int enemycount = 0;
+
+    public ArrayList<NormalEnemies> enemyList = new ArrayList<NormalEnemies>();
+    public int enemyCount = 0;
     public int destroyed = 0;
     public int waveNum;
     private void startGameLoop() {
@@ -67,22 +67,30 @@ public class MainGame {
             @Override
             public void handle(long now){
                 player.update();
-                if (test.isAlive()){
-                    test.ifGone();
-                    test.update();
-                }
-                if (enemycount == destroyed){
+                System.out.println("count:"+enemyCount);
+                System.out.println("destroyed:"+destroyed);
+                if (enemyCount == destroyed){
                     waveNum = 1;
                     CreateWave();
                     System.out.printf("a");
                 }
-
+                for (NormalEnemies enemy : enemyList) {
+                    if (enemy.isAlive()){
+                        destroyed =destroyed + enemy.ifGone(destroyed);
+                        enemy.update();
+                    }
+                }
                 for (Projectile projectile:projectiles) {
                     projectile.update();
+                    for (NormalEnemies enemy : enemyList) {
+                        if (projectile.getEntity().getBoundsInParent().intersects(enemy.getEntity().getBoundsInParent())){
+                            if (enemy.isAlive()){
+                                enemy.hit(projectile);
+                                RemoveItem(projectile.getEntity());
+                                destroyed++;
+                            }
 
-                    if (projectile.getEntity().getBoundsInParent().intersects(test.getEntity().getBoundsInParent())){
-                        test.hit(projectile);
-                        RemoveItem(projectile.getEntity());
+                        }
                     }
                     
                 }
@@ -92,7 +100,12 @@ public class MainGame {
     }
 
     private void CreateWave() {
-        enemycount++;
+        for (int i = 0; i < 5; i++) {
+            NormalEnemies test = new NormalEnemies((GAMEWIDTH/6) * (i+1), 200,false );
+            enemyList.add(test);
+            enemyCount = enemyCount + 1;
+        }
+
     }
 
     public static void AddItem(Rectangle item){root.getChildren().add(item);}

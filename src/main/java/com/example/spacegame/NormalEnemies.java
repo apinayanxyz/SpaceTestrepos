@@ -21,11 +21,13 @@ public class NormalEnemies extends BaseEntity{
         isAlive=false;
     }
 
-    public void ifGone(){
+    public int ifGone(int destroyPlus){
         if (getPosY()>MainGame.GAMEHEIGHT+getSizeY()) {
             MainGame.RemoveItem(super.getEntity());
             isAlive = false;
             System.out.printf("Gone");
+            return 1;
         }
+        return 0;
     }
 }
