@@ -234,12 +234,15 @@ public class MainGame {
                             }
                         }
                     }
+                    for (PowerUp powerup : powerUps) {
+                        powerup.update();
+                    }
                     for (Asteroid asteroid : asteroids) {
                         if (projectile.getEntity().getBoundsInParent()
                                 .intersects(asteroid.getEntity().getBoundsInParent())) {
                             if (!projectile.isHasShot()) {
                                 if (asteroid.isAlive()) {
-                                    PowerUp test = new PowerUp(asteroid.getPosX(),asteroid.getPosY());
+                                    PowerUp test = new PowerUp(asteroid.getPosX(),asteroid.getPosY());powerUps.add(test);
                                     asteroid.hit(projectile);
                                     projectile.setHasShot(true);
                                     RemoveItem(projectile.getEntity());
@@ -355,20 +358,56 @@ public class MainGame {
         root.getChildren().add(item);
     }
 
+    private static boolean isDouble = true;
+    private static boolean isTriple = true;
+    private static boolean isVertical = false;
+    private static boolean isMulti = true;
     public static void AddProjectile(int direction , int bulletSpawn, int yPos) {
-        if (direction == -1){
-            Projectile tempProj = new Projectile(bulletSpawn, yPos, direction);
-            projectiles.add(tempProj);
-        }
-        else{
-            Projectile tempProj = new Projectile(bulletSpawn, yPos + 70, direction);
-            enemyProjectiles.add(tempProj);
-        }
+        if (isMulti) {
+            if (isDouble) {
+                for (int i = 1; i <= 2; i++) {
+                    if (direction == -1) {
+                        Projectile tempProj = new Projectile((bulletSpawn - 90) + 60 * i, yPos, direction);
+                        projectiles.add(tempProj);
+                    } else {
+                        Projectile tempProj = new Projectile((bulletSpawn - 90) + 60 * i, yPos + 70, direction);
+                        enemyProjectiles.add(tempProj);
+                    }
+                }
+            }
+                if (isTriple) {
+                    for (int i = 1; i <= 3; i++) {
+                        if (direction == -1) {
+                            Projectile tempProj = new Projectile((bulletSpawn - 150) + 75 * i, yPos, direction);
+                            projectiles.add(tempProj);
+                        } else {
+                            Projectile tempProj = new Projectile((bulletSpawn - 150) + 75 * i, yPos + 70, direction);
+                            enemyProjectiles.add(tempProj);
+                        }
+                    }
 
+                }
 
-    }
+            } else {
+                if (direction == -1) {
+                    Projectile tempProj = new Projectile(bulletSpawn, yPos, direction);
+                    projectiles.add(tempProj);
+                } else {
+                    Projectile tempProj = new Projectile(bulletSpawn, yPos + 70, direction);
+                    enemyProjectiles.add(tempProj);
+                }
+            }
+
+        }
 
     public static void RemoveItem(Rectangle item) {
         root.getChildren().remove(item);
+    }
+
+    public void addPower(int type){
+        switch (type) {
+            case 1:
+                break;
+        }
     }
 }
