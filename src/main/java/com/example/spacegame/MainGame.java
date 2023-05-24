@@ -6,11 +6,16 @@ import javafx.animation.Timeline;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Cell;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -69,7 +74,7 @@ public class MainGame {
                                 if (timeSeconds == 1) {
                                     timeSeconds = 0;
                                     roundBreak = false;
-                                    //root.getChildren().remove(roundText);
+                                    root.getChildren().remove(roundText);
                                 }
                             }
                         }));
@@ -87,6 +92,8 @@ public class MainGame {
             KeyCode code = e.getCode();
             Mechanics.stopMovement(code, player);
         });
+        root.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
+        roundText.setLayoutX(GAMEWIDTH/2 - 50);
         stage.setTitle("Hello!");
         stage.setScene(scene);
         scene.setFill(BLACK);
@@ -104,13 +111,13 @@ public class MainGame {
 
     public int roundWaveCount = 0;
     public int roundWaveMax = 0;
-    public Label roundText;
+    public Label roundText = new Label();;
+
     private void startGameLoop() {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
                 player.update();
-                scene.setFill(RED);
                 /*
                  * System.out.println("Round Wave count:" + roundWaveCount);
                  * System.out.println("Round max:" + roundWaveMax);
@@ -129,11 +136,12 @@ public class MainGame {
                                 roundWaveCount = 0;
                                 roundWaveMax++;
                                 roundBreak = true;
-                                //roundText = new Label("Round " + roundWaveMax + " start");
-                                //roundText.setTextFill(WHITE);
+
+                                roundText.setText("Round " + (roundWaveMax + 1) + " start");
+                                roundText.setTextFill(WHITE);
                                 //System.out.println(roundText.getAccessibleText());
                                 //scene.setFill(BLACK);
-                                //root.getChildren().add(roundText);
+                                root.getChildren().add(roundText);
                                 roundCooldown.playFromStart();
                             }
                         }
@@ -177,6 +185,11 @@ public class MainGame {
                     enemyList.add(test);
                     enemyCount = enemyCount + 1;
                 }
+                for (int i = 1; i < 6; i++) {
+                    NormalEnemies test = new NormalEnemies((GAMEWIDTH / 6) * (i), -350, false);
+                    enemyList.add(test);
+                    enemyCount = enemyCount + 1;
+                }
                 break;
             case 2:
                 for (int i = 1; i < 6; i++) {
@@ -189,10 +202,25 @@ public class MainGame {
                     enemyList.add(test);
                     enemyCount = enemyCount + 1;
                 }
+                for (int i = 1; i < 6; i++) {
+                    NormalEnemies test;
+                    if (i > 1) {
+                        test = new NormalEnemies((GAMEWIDTH / 6) * (i), -350, true, i % ((i / 2) * 2));
+                    } else {
+                        test = new NormalEnemies((GAMEWIDTH / 6) * (i), -350, true, i);
+                    }
+                    enemyList.add(test);
+                    enemyCount = enemyCount + 1;
+                }
                 break;
             case 3:
                 for (int i = 1; i < 6; i++) {
                     NormalEnemies test = new NormalEnemies((GAMEWIDTH / 6) * (i), -50, true);
+                    enemyList.add(test);
+                    enemyCount = enemyCount + 1;
+                }
+                for (int i = 1; i < 6; i++) {
+                    NormalEnemies test = new NormalEnemies((GAMEWIDTH / 6) * (i), -350, true);
                     enemyList.add(test);
                     enemyCount = enemyCount + 1;
                 }
@@ -203,10 +231,20 @@ public class MainGame {
                     enemyList.add(test);
                     enemyCount = enemyCount + 1;
                 }
+                for (int i = 1; i < 6; i++) {
+                    NormalEnemies test = new NormalEnemies((GAMEWIDTH / 6) * (i), -350, true, 0);
+                    enemyList.add(test);
+                    enemyCount = enemyCount + 1;
+                }
                 break;
             case 5:
                 for (int i = 1; i < 6; i++) {
                     NormalEnemies test = new NormalEnemies((GAMEWIDTH / 6) * (i), -50, true, 0);
+                    enemyList.add(test);
+                    enemyCount = enemyCount + 1;
+                }
+                for (int i = 1; i < 6; i++) {
+                    NormalEnemies test = new NormalEnemies((GAMEWIDTH / 6) * (i), -350, true, 1);
                     enemyList.add(test);
                     enemyCount = enemyCount + 1;
                 }
