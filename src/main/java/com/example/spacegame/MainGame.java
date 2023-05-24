@@ -49,6 +49,7 @@ public class MainGame {
     public static ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
     public static ArrayList<Projectile> enemyProjectiles = new ArrayList<Projectile>();
     public static ArrayList<Asteroid> asteroids = new ArrayList<Asteroid>();
+    public static ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
 
     public ArrayList<NormalEnemies> enemyList = new ArrayList<NormalEnemies>();
     public ArrayList<ShootingEnemies> enemyList2 = new ArrayList<ShootingEnemies>();
@@ -68,6 +69,7 @@ public class MainGame {
     private Timeline roundCooldown = new Timeline();
     public int timeSeconds = 0;
     public boolean roundBreak = false;
+
 
     public MainGame(Stage stage) {
         this.stage = stage;
@@ -128,7 +130,7 @@ public class MainGame {
             int randNum = rand.nextInt(5) + 1;
             int randXNum = rand.nextInt(GAMEWIDTH-80) + 1;
             Timeline cooldown1 = new Timeline();
-            cooldown1.setCycleCount(2);
+            cooldown1.setCycleCount(1);
             cooldown1.getKeyFrames().add(
                     new KeyFrame(Duration.seconds(10),
                             new EventHandler() {
@@ -237,6 +239,7 @@ public class MainGame {
                                 .intersects(asteroid.getEntity().getBoundsInParent())) {
                             if (!projectile.isHasShot()) {
                                 if (asteroid.isAlive()) {
+                                    PowerUp test = new PowerUp(asteroid.getPosX(),asteroid.getPosY());
                                     asteroid.hit(projectile);
                                     projectile.setHasShot(true);
                                     RemoveItem(projectile.getEntity());
