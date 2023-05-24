@@ -12,13 +12,22 @@ public class Shootables extends BaseEntity{
     private boolean firing;
     private Timeline cooldown = new Timeline();
 
+    private int bulletSpawnX;
+
+    public void setBulletSpawnX(int bulletSpawnX) {
+        this.bulletSpawnX = bulletSpawnX;
+    }
+    public int getBulletSpawnX() {
+        return bulletSpawnX;
+    }
     private int direction;
     private float timeSeconds = 0;
     public Shootables(int sizeX, int sizeY, int posX, int poxY, int speedX, int speedY, int direction) {
         super(sizeX, sizeY, posX, poxY, speedX, speedY);
         this.direction = direction;
-        cooldown.setCycleCount(3);
-        cooldown.getKeyFrames().add(
+        Timeline cooldown1 = new Timeline();
+        cooldown1.setCycleCount(3);
+        cooldown1.getKeyFrames().add(
                 new KeyFrame(Duration.seconds(ProjectileStats.getFireCooldown()),
                         new EventHandler() {
                             @Override
@@ -30,11 +39,12 @@ public class Shootables extends BaseEntity{
                                 }
                             }
                         }));
+        cooldown=cooldown1;
     }
 
     public void Fire(int direction){
         if (!fired){
-            MainGame.AddProjectile();
+            MainGame.AddProjectile(direction,bulletSpawnX,getPosY());
             fired=true;
             cooldown.playFromStart();
         }
@@ -55,4 +65,22 @@ public class Shootables extends BaseEntity{
         this.firing = firing;
     }
     //Shoot
+
+    public void updateTimer(){
+        Timeline cooldown1 = new Timeline();
+        cooldown1.setCycleCount(3);
+        cooldown1.getKeyFrames().add(
+                new KeyFrame(Duration.seconds(ProjectileStats.getFireCooldown()),
+                        new EventHandler() {
+                            @Override
+                            public void handle(Event event) {
+                                timeSeconds++;
+                                if (timeSeconds >= 1) {
+                                    timeSeconds = 0;
+                                    fired=false;
+                                }
+                            }
+                        }));
+        cooldown=cooldown1;
+    }
 }

@@ -13,13 +13,13 @@ public class ProjectileStats {
     private static float fireCooldown=3;
 
     //Methods
-    public void setSpeed(int speed) {
-        this.speed = speed;
+    public static void setSpeed(int speed1) {
+        speed = speed1;
     }
-    public void setSize(int size) {
-        this.size = size;
+    public static void setSize(int size1) {
+        size = size1;
     }
     public static float getFireCooldown() { return fireCooldown; }
-    public void setFireCooldown(float fireCooldown) { this.fireCooldown = fireCooldown; }
+    public static void setFireCooldown(float fireCooldown1) { fireCooldown = fireCooldown1; }
 
 }

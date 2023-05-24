@@ -47,7 +47,21 @@ public class MainGame {
     public Scene scene = new Scene(root, GAMEWIDTH, GAMEHEIGHT);
     public static Player player = new Player(GAMEWIDTH / 2 - 25, GAMEHEIGHT / 2);
     public static ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
-    public static ArrayList<BaseEntity> enemies = new ArrayList<BaseEntity>();
+    public static ArrayList<Projectile> enemyProjectiles = new ArrayList<Projectile>();
+    public static ArrayList<Asteroid> asteroids = new ArrayList<Asteroid>();
+
+    public ArrayList<NormalEnemies> enemyList = new ArrayList<NormalEnemies>();
+    public ArrayList<ShootingEnemies> enemyList2 = new ArrayList<ShootingEnemies>();
+    //Wave variables
+    public int enemyCount = 0;
+    public int destroyed = 0;
+    public int waveNum;
+
+    public int roundCount = 1;
+    //Round variables
+    public int roundWaveCount = 0;
+    public int roundWaveMax = 0;
+    public Label roundText = new Label();;
 
     // Miscellanous
 
@@ -60,6 +74,8 @@ public class MainGame {
         stage.setResizable(false);
         stage.setMaximized(false);
         stage.setFullScreen(false);
+        Random rand = new Random();
+        int randNum = rand.nextInt(5) + 1;
     }
 
     public void startGame() throws IOException {
@@ -102,21 +118,43 @@ public class MainGame {
         startGameLoop();
     }
 
-    public ArrayList<NormalEnemies> enemyList = new ArrayList<NormalEnemies>();
-    public int enemyCount = 0;
-    public int destroyed = 0;
-    public int waveNum;
+    private boolean asteroidPlaying = true;
+    private Timeline asteroidCooldown;
+    private int timeSeconds1 = 0;
+    private void createAsteroid() {
+        if (asteroidPlaying){
+            Random rand = new Random();
+            asteroidPlaying = false;
+            int randNum = rand.nextInt(5) + 1;
+            int randXNum = rand.nextInt(GAMEWIDTH-80) + 1;
+            Timeline cooldown1 = new Timeline();
+            cooldown1.setCycleCount(2);
+            cooldown1.getKeyFrames().add(
+                    new KeyFrame(Duration.seconds(10),
+                            new EventHandler() {
+                                @Override
+                                public void handle(Event event) {
+                                    System.out.println(timeSeconds);
+                                    timeSeconds1++;
+                                    if (timeSeconds1 >= 1) {
+                                        timeSeconds1 = 0;
+                                        Asteroid asteroid = new Asteroid(randXNum,-80);
+                                        asteroids.add(asteroid);
+                                        asteroidPlaying=true;
+                                    }
+                                }
+                            }));
+            asteroidCooldown = cooldown1;
+            asteroidCooldown.playFromStart();
+        }
 
-    public int roundCount = 1;
-
-    public int roundWaveCount = 0;
-    public int roundWaveMax = 0;
-    public Label roundText = new Label();;
+    }
 
     private void startGameLoop() {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
+                createAsteroid();
                 player.update();
                 /*
                  * System.out.println("Round Wave count:" + roundWaveCount);
@@ -130,9 +168,10 @@ public class MainGame {
                             if (roundWaveCount <= roundWaveMax) {
                                 waveNum = 1;
                                 CreateWave();
-                                System.out.printf("a");
                                 roundWaveCount++;
                             } else {
+                                //ProjectileStats.setFireCooldown(ProjectileStats.getFireCooldown()/2);
+                                //player.updateTimer();
                                 roundWaveCount = 0;
                                 roundWaveMax++;
                                 roundBreak = true;
@@ -153,6 +192,18 @@ public class MainGame {
                         enemy.update();
                     }
                 }
+                for (ShootingEnemies enemy : enemyList2) {
+                    if (enemy.isAlive()) {
+                        destroyed = destroyed + enemy.ifGone(destroyed);
+                        enemy.update();
+                    }
+                }
+                for (Projectile projectile : enemyProjectiles) {
+                    projectile.update();
+                }
+                for (Asteroid asteroid : asteroids) {
+                    asteroid.update();
+                }
                 for (Projectile projectile : projectiles) {
                     projectile.update();
                     for (NormalEnemies enemy : enemyList) {
@@ -168,7 +219,31 @@ public class MainGame {
                             }
                         }
                     }
-
+                    for (ShootingEnemies enemy : enemyList2) {
+                        if (projectile.getEntity().getBoundsInParent()
+                                .intersects(enemy.getEntity().getBoundsInParent())) {
+                            if (!projectile.isHasShot()) {
+                                if (enemy.isAlive()) {
+                                    enemy.hit(projectile);
+                                    projectile.setHasShot(true);
+                                    RemoveItem(projectile.getEntity());
+                                    destroyed++;
+                                }
+                            }
+                        }
+                    }
+                    for (Asteroid asteroid : asteroids) {
+                        if (projectile.getEntity().getBoundsInParent()
+                                .intersects(asteroid.getEntity().getBoundsInParent())) {
+                            if (!projectile.isHasShot()) {
+                                if (asteroid.isAlive()) {
+                                    asteroid.hit(projectile);
+                                    projectile.setHasShot(true);
+                                    RemoveItem(projectile.getEntity());
+                                }
+                            }
+                        }
+                    }
                 }
 
             }
@@ -188,6 +263,11 @@ public class MainGame {
                 for (int i = 1; i < 8; i++) {
                     NormalEnemies test = new NormalEnemies((GAMEWIDTH / 8) * (i) - 40, -350, false);
                     enemyList.add(test);
+                    enemyCount = enemyCount + 1;
+                }
+                for (int i = 1; i < 4; i++) {
+                    ShootingEnemies test = new ShootingEnemies((GAMEWIDTH/4)*i,-200);
+                    enemyList2.add(test);
                     enemyCount = enemyCount + 1;
                 }
                 break;
@@ -212,6 +292,11 @@ public class MainGame {
                     enemyList.add(test);
                     enemyCount = enemyCount + 1;
                 }
+                for (int i = 1; i < 3; i++) {
+                    ShootingEnemies test = new ShootingEnemies((GAMEWIDTH/3)*i,-200);
+                    enemyList2.add(test);
+                    enemyCount = enemyCount + 1;
+                }
                 break;
             case 3:
                 for (int i = 1; i < 8; i++) {
@@ -222,6 +307,11 @@ public class MainGame {
                 for (int i = 1; i < 8; i++) {
                     NormalEnemies test = new NormalEnemies((GAMEWIDTH / 8) * (i) - 40, -350, true);
                     enemyList.add(test);
+                    enemyCount = enemyCount + 1;
+                }
+                for (int i = 1; i < 4; i++) {
+                    ShootingEnemies test = new ShootingEnemies((GAMEWIDTH/4)*i,-200);
+                    enemyList2.add(test);
                     enemyCount = enemyCount + 1;
                 }
                 break;
@@ -248,6 +338,11 @@ public class MainGame {
                     enemyList.add(test);
                     enemyCount = enemyCount + 1;
                 }
+                for (int i = 1; i < 2; i++) {
+                    ShootingEnemies test = new ShootingEnemies((GAMEWIDTH/2)*i,-200);
+                    enemyList2.add(test);
+                    enemyCount = enemyCount + 1;
+                }
                 break;
         }
 
@@ -257,9 +352,17 @@ public class MainGame {
         root.getChildren().add(item);
     }
 
-    public static void AddProjectile() {
-        Projectile tempProj = new Projectile(player.getBulletSpawnX(), player.getPosY(), -1);
-        projectiles.add(tempProj);
+    public static void AddProjectile(int direction , int bulletSpawn, int yPos) {
+        if (direction == -1){
+            Projectile tempProj = new Projectile(bulletSpawn, yPos, direction);
+            projectiles.add(tempProj);
+        }
+        else{
+            Projectile tempProj = new Projectile(bulletSpawn, yPos + 70, direction);
+            enemyProjectiles.add(tempProj);
+        }
+
+
     }
 
     public static void RemoveItem(Rectangle item) {

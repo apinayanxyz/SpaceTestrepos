@@ -6,7 +6,6 @@ public class Player extends Shootables{
     public int playerSize;
     public int playerSpeed;
 
-    private int bulletSpawnX;
     public int health;
 
     public int getPlayerSize() {
@@ -19,15 +18,13 @@ public class Player extends Shootables{
         this.playerSpeed = 5;
         this.health = 30;
         super.setImage(new Image("file:Images/Player.png"));
-        bulletSpawnX = posX + playerSize/2;
-    }
-    public int getBulletSpawnX() {
-        return bulletSpawnX;
+        super.setBulletSpawnX(posX + playerSize/2);
     }
 
     @Override
     public void update(){
-        bulletSpawnX = getPosX() + playerSize/2;
+        super.setBulletSpawnX(getPosX() + playerSize/2 -5);
+        //System.out.println(ProjectileStats.getFireCooldown());
         super.Update();
     }
 
