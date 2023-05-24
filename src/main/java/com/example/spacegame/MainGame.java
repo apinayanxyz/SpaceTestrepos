@@ -180,71 +180,71 @@ public class MainGame {
         int randNum = rand.nextInt(5) + 1;
         switch (randNum) {
             case 1:
-                for (int i = 1; i < 6; i++) {
-                    NormalEnemies test = new NormalEnemies((GAMEWIDTH / 6) * (i), -50, false);
+                for (int i = 1; i < 8; i++) {
+                    NormalEnemies test = new NormalEnemies((GAMEWIDTH / 8) * (i) - 40, -80, false);
                     enemyList.add(test);
                     enemyCount = enemyCount + 1;
                 }
-                for (int i = 1; i < 6; i++) {
-                    NormalEnemies test = new NormalEnemies((GAMEWIDTH / 6) * (i), -350, false);
+                for (int i = 1; i < 8; i++) {
+                    NormalEnemies test = new NormalEnemies((GAMEWIDTH / 8) * (i) - 40, -350, false);
                     enemyList.add(test);
                     enemyCount = enemyCount + 1;
                 }
                 break;
             case 2:
-                for (int i = 1; i < 6; i++) {
+                for (int i = 1; i < 8; i++) {
                     NormalEnemies test;
                     if (i > 1) {
-                        test = new NormalEnemies((GAMEWIDTH / 6) * (i), -50, true, i % ((i / 2) * 2));
+                        test = new NormalEnemies((GAMEWIDTH / 8) * (i) - 40, -50, true, i % ((i / 2) * 2));
                     } else {
-                        test = new NormalEnemies((GAMEWIDTH / 6) * (i), -50, true, i);
+                        test = new NormalEnemies((GAMEWIDTH / 8) * (i) - 40, -50, true, i);
                     }
                     enemyList.add(test);
                     enemyCount = enemyCount + 1;
                 }
-                for (int i = 1; i < 6; i++) {
+                for (int i = 1; i < 8; i++) {
                     NormalEnemies test;
                     if (i > 1) {
-                        test = new NormalEnemies((GAMEWIDTH / 6) * (i), -350, true, i % ((i / 2) * 2));
+                        test = new NormalEnemies((GAMEWIDTH / 8) * (i) - 40, -350, true, i % ((i / 2) * 2));
                     } else {
-                        test = new NormalEnemies((GAMEWIDTH / 6) * (i), -350, true, i);
+                        test = new NormalEnemies((GAMEWIDTH / 8) * (i) - 40, -350, true, i);
                     }
                     enemyList.add(test);
                     enemyCount = enemyCount + 1;
                 }
                 break;
             case 3:
-                for (int i = 1; i < 6; i++) {
-                    NormalEnemies test = new NormalEnemies((GAMEWIDTH / 6) * (i), -50, true);
+                for (int i = 1; i < 8; i++) {
+                    NormalEnemies test = new NormalEnemies((GAMEWIDTH / 8) * (i) - 40, -50, true);
                     enemyList.add(test);
                     enemyCount = enemyCount + 1;
                 }
-                for (int i = 1; i < 6; i++) {
-                    NormalEnemies test = new NormalEnemies((GAMEWIDTH / 6) * (i), -350, true);
+                for (int i = 1; i < 8; i++) {
+                    NormalEnemies test = new NormalEnemies((GAMEWIDTH / 8) * (i) - 40, -350, true);
                     enemyList.add(test);
                     enemyCount = enemyCount + 1;
                 }
                 break;
             case 4:
-                for (int i = 1; i < 6; i++) {
-                    NormalEnemies test = new NormalEnemies((GAMEWIDTH / 6) * (i), -50, true, 1);
+                for (int i = 1; i < 8; i++) {
+                    NormalEnemies test = new NormalEnemies((GAMEWIDTH / 8) * (i) - 40, -50, true, 1);
                     enemyList.add(test);
                     enemyCount = enemyCount + 1;
                 }
-                for (int i = 1; i < 6; i++) {
-                    NormalEnemies test = new NormalEnemies((GAMEWIDTH / 6) * (i), -350, true, 0);
+                for (int i = 1; i < 8; i++) {
+                    NormalEnemies test = new NormalEnemies((GAMEWIDTH / 8) * (i) - 40, -350, true, 0);
                     enemyList.add(test);
                     enemyCount = enemyCount + 1;
                 }
                 break;
             case 5:
-                for (int i = 1; i < 6; i++) {
-                    NormalEnemies test = new NormalEnemies((GAMEWIDTH / 6) * (i), -50, true, 0);
+                for (int i = 1; i < 8; i++) {
+                    NormalEnemies test = new NormalEnemies((GAMEWIDTH / 8) * (i) - 40, -50, true, 0);
                     enemyList.add(test);
                     enemyCount = enemyCount + 1;
                 }
-                for (int i = 1; i < 6; i++) {
-                    NormalEnemies test = new NormalEnemies((GAMEWIDTH / 6) * (i), -350, true, 1);
+                for (int i = 1; i < 8; i++) {
+                    NormalEnemies test = new NormalEnemies((GAMEWIDTH / 8) * (i) - 40, -350, true, 1);
                     enemyList.add(test);
                     enemyCount = enemyCount + 1;
                 }

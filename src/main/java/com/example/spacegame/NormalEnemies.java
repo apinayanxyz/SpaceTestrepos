@@ -1,5 +1,7 @@
 package com.example.spacegame;
 
+import javafx.scene.image.Image;
+
 import java.util.Random;
 
 public class NormalEnemies extends BaseEntity{
@@ -12,18 +14,20 @@ public class NormalEnemies extends BaseEntity{
     public void setAlive(boolean alive) {isAlive = alive;}
 
     public NormalEnemies(int posX, int poxY, boolean canMoveVertical) {
-        super(50, 50, posX, poxY, 1, 1);
+        super(80, 80, posX, poxY, 1, 1);
         this.canMoveVertical = canMoveVertical;
         isAlive=true;
+        super.setImage(new Image("file:Images/NormalEnemy.png"));
         moveVertical(-1);
         super.setDown(true);
     }
     public NormalEnemies(int posX, int poxY, boolean canMoveVertical,int startDirection) {
-        super(50, 50, posX, poxY, 1, 1);
+        super(80, 80, posX, poxY, 1, 1);
         this.canMoveVertical = canMoveVertical;
         this.startDirection = startDirection;
         moveVertical(startDirection);
         isAlive=true;
+        super.setImage(new Image("file:Images/NormalEnemy.png"));
         super.setDown(true);
     }
 

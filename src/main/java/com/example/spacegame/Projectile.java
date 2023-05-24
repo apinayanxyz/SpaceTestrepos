@@ -8,6 +8,11 @@ public class Projectile extends BaseEntity{
     public boolean isHasShot() { return hasShot; }
 
     public void setHasShot(boolean hasShot) { this.hasShot = hasShot; }
+    private boolean isEnemyBullet;
+
+    public boolean isEnemyBullet() { return isEnemyBullet; }
+
+    public void setEnemyBullet(boolean enemyBullet) { isEnemyBullet = enemyBullet; }
 
     public Projectile(int posX, int poxY, int direction) {
         super(ProjectileStats.size, ProjectileStats.size, posX, poxY, ProjectileStats.speed, ProjectileStats.speed);
