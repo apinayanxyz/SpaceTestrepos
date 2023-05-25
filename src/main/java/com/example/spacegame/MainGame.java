@@ -62,7 +62,8 @@ public class MainGame {
     //Round variables
     public int roundWaveCount = 0;
     public int roundWaveMax = 0;
-    public Label roundText = new Label();;
+    public Label roundText = new Label();
+    public Label livesText = new Label();
 
     // Miscellanous
 
@@ -189,6 +190,10 @@ public class MainGame {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
+                root.getChildren().remove(livesText);
+                livesText.setText("Health:"+player.health);
+                root.getChildren().add(livesText);
+                
                 if (!paused) {
                     createAsteroid();
                     player.update();
