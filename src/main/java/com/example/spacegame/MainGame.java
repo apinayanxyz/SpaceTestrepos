@@ -152,7 +152,9 @@ public class MainGame {
      * Creates asteroids at a certain interval
      * */
     private void createAsteroid() {
+
         if (asteroidPlaying){
+            System.out.println("3333");
             Random rand = new Random();
             asteroidPlaying = false;
             int randNum = rand.nextInt(5) + 1;
@@ -174,6 +176,7 @@ public class MainGame {
                                     }
                                 }
                             }));
+            cooldown1.playFromStart();
         }
 
     }
@@ -190,8 +193,9 @@ public class MainGame {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                root.getChildren().remove(livesText);
                 livesText.setText("Health:"+player.health);
+                livesText.setTextFill(WHITE);
+                root.getChildren().remove(livesText);
                 root.getChildren().add(livesText);
                 
                 if (!paused) {
@@ -204,7 +208,7 @@ public class MainGame {
                         roundText.setText("You Lose");
                         root.getChildren().add(roundText);
                         paused = true;
-                        ;
+
                     }
                     if (!roundBreak) {
                         if (roundWaveMax < 5) {
@@ -240,10 +244,12 @@ public class MainGame {
                             destroyed = destroyed + enemy.ifGone(destroyed);
                             if (enemy.getEntity().getBoundsInParent().intersects(player.getEntity().getBoundsInParent())) {
                                 if (!playerInvincible) {
+                                    System.out.println("C");
                                     player.health--;
                                     playerInvincible = true;
                                     invincibleCoolDown.playFromStart();
                                 }
+                                System.out.println("d");
                             }
                             enemy.update();
                         }
@@ -253,10 +259,12 @@ public class MainGame {
                             destroyed = destroyed + enemy.ifGone(destroyed);
                             if (enemy.getEntity().getBoundsInParent().intersects(player.getEntity().getBoundsInParent())) {
                                 if (!playerInvincible) {
+                                    System.out.println("b");
                                     player.health--;
                                     playerInvincible = true;
                                     invincibleCoolDown.playFromStart();
                                 }
+                                System.out.println("e");
                             }
                             enemy.update();
                         }
@@ -266,6 +274,7 @@ public class MainGame {
                         if (!projectile.isHasShot()) {
                             if (projectile.getEntity().getBoundsInParent().intersects(player.getEntity().getBoundsInParent())) {
                                 if (!playerInvincible) {
+                                    System.out.println("a");
                                     player.health--;
                                     playerInvincible = true;
                                     invincibleCoolDown.playFromStart();
