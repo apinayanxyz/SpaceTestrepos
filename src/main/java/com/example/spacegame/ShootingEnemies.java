@@ -6,6 +6,10 @@ public class ShootingEnemies extends Shootables{
 
     private boolean isAlive;
     public boolean isAlive() {return isAlive;}
+    /*
+    * Main constructor used for enemies that shoot
+    * sets image and bullet spawn placement
+    * */
     public ShootingEnemies(int posX, int poxY) {
         super(80, 80, posX, poxY, 1, 1, 1);
         super.setDown(true);
@@ -15,6 +19,10 @@ public class ShootingEnemies extends Shootables{
         super.setBulletSpawnX(posX + 80/2);
     }
 
+    /*
+    * Removes enemy
+    * used for incrementing destroyed variable in main game loop
+    * */
     public int ifGone(int destroyPlus){
         if (getPosY()>MainGame.GAMEHEIGHT+getSizeY()) {
             MainGame.RemoveItem(super.getEntity());
@@ -24,6 +32,9 @@ public class ShootingEnemies extends Shootables{
         }
         return 0;
     }
+    /*
+     * Removes enemy
+     * */
     public void hit(Projectile projectile){
         MainGame.RemoveItem(super.getEntity());
         isAlive=false;

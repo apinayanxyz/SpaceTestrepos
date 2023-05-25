@@ -70,16 +70,22 @@ public class MainGame {
     public int timeSeconds = 0;
     public boolean roundBreak = false;
 
-
+    /*
+     * Constructer for this class
+     * takes stage from main class and changes it to be fixed
+     * */
     public MainGame(Stage stage) {
         this.stage = stage;
         stage.setResizable(false);
         stage.setMaximized(false);
         stage.setFullScreen(false);
-        Random rand = new Random();
-        int randNum = rand.nextInt(5) + 1;
     }
 
+    /*
+     * Main method used to start game
+     * creates timers for cooldowns
+     * sets up stage to be used for game
+     * */
     public void startGame() throws IOException {
 
         roundCooldown.setCycleCount(1);
@@ -118,11 +124,32 @@ public class MainGame {
         stage.show();
 
         startGameLoop();
+        Timeline cooldown2 = new Timeline();
+        cooldown2.setCycleCount(1);
+        cooldown2.getKeyFrames().add(
+                new KeyFrame(Duration.seconds(2),
+                        new EventHandler() {
+                            @Override
+                            public void handle(Event event) {
+                                timeSeconds1++;
+
+                                if (timeSeconds1 >= 1) {
+                                    timeSeconds1 = 0;
+                                    playerInvincible = false;
+                                }
+                            }
+                        }));
+        invincibleCoolDown = cooldown2;
+        invincibleCoolDown.playFromStart();
     }
 
     private boolean asteroidPlaying = true;
     private Timeline asteroidCooldown;
     private int timeSeconds1 = 0;
+
+    /*
+     * Creates asteroids at a certain interval
+     * */
     private void createAsteroid() {
         if (asteroidPlaying){
             Random rand = new Random();
@@ -146,116 +173,177 @@ public class MainGame {
                                     }
                                 }
                             }));
-            asteroidCooldown = cooldown1;
-            asteroidCooldown.playFromStart();
         }
 
     }
+    private boolean paused = false;
+    private boolean playerInvincible = false;
 
+    private Timeline invincibleCoolDown;
+
+    /*
+     * Animation timer method where game is run
+     * Moves items, checks if collision happens
+     * */
     private void startGameLoop() {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                createAsteroid();
-                player.update();
-                /*
-                 * System.out.println("Round Wave count:" + roundWaveCount);
-                 * System.out.println("Round max:" + roundWaveMax);
-                 * System.out.println("count:" + enemyCount);
-                 * System.out.println("destroyed:" + destroyed);
-                 */
-                if (!roundBreak) {
-                    if (roundWaveMax < 5) {
-                        if (enemyCount == destroyed) {
-                            if (roundWaveCount <= roundWaveMax) {
-                                waveNum = 1;
-                                CreateWave();
-                                roundWaveCount++;
-                            } else {
-                                //ProjectileStats.setFireCooldown(ProjectileStats.getFireCooldown()/2);
-                                //player.updateTimer();
-                                roundWaveCount = 0;
-                                roundWaveMax++;
-                                roundBreak = true;
+                if (!paused) {
+                    createAsteroid();
+                    player.update();
+                    roundText.setTextFill(WHITE);
+                    roundText.setLayoutY(200);
+                    if (player.health <= 0) {
+                        RemoveItem(player.getEntity());
+                        roundText.setText("You Lose");
+                        root.getChildren().add(roundText);
+                        paused = true;
+                        ;
+                    }
+                    if (!roundBreak) {
+                        if (roundWaveMax < 5) {
+                            if (enemyCount == destroyed) {
+                                if (roundWaveCount <= roundWaveMax) {
+                                    waveNum = 1;
+                                    CreateWave();
+                                    roundWaveCount++;
+                                } else {
+                                    //ProjectileStats.setFireCooldown(ProjectileStats.getFireCooldown()/2);
+                                    //player.updateTimer();
+                                    roundWaveCount = 0;
+                                    roundWaveMax++;
+                                    roundBreak = true;
 
-                                roundText.setText("Round " + (roundWaveMax + 1) + " start");
-                                roundText.setTextFill(WHITE);
-                                //System.out.println(roundText.getAccessibleText());
-                                //scene.setFill(BLACK);
-                                root.getChildren().add(roundText);
-                                roundCooldown.playFromStart();
-                            }
-                        }
-                    }
-                }
-                for (NormalEnemies enemy : enemyList) {
-                    if (enemy.isAlive()) {
-                        destroyed = destroyed + enemy.ifGone(destroyed);
-                        enemy.update();
-                    }
-                }
-                for (ShootingEnemies enemy : enemyList2) {
-                    if (enemy.isAlive()) {
-                        destroyed = destroyed + enemy.ifGone(destroyed);
-                        enemy.update();
-                    }
-                }
-                for (Projectile projectile : enemyProjectiles) {
-                    projectile.update();
-                }
-                for (Asteroid asteroid : asteroids) {
-                    asteroid.update();
-                }
-                for (Projectile projectile : projectiles) {
-                    projectile.update();
-                    for (NormalEnemies enemy : enemyList) {
-                        if (projectile.getEntity().getBoundsInParent()
-                                .intersects(enemy.getEntity().getBoundsInParent())) {
-                            if (!projectile.isHasShot()) {
-                                if (enemy.isAlive()) {
-                                    enemy.hit(projectile);
-                                    projectile.setHasShot(true);
-                                    RemoveItem(projectile.getEntity());
-                                    destroyed++;
+                                    roundText.setText("Round " + (roundWaveMax + 1) + " start");
+                                    roundText.setTextFill(WHITE);
+                                    //System.out.println(roundText.getAccessibleText());
+                                    //scene.setFill(BLACK);
+                                    root.getChildren().add(roundText);
+                                    roundCooldown.playFromStart();
                                 }
                             }
+                        }
+                        else {
+                            roundText.setText("You Win");
+                            root.getChildren().add(roundText);
+                            paused = true;
+                        }
+                    }
+                    for (NormalEnemies enemy : enemyList) {
+                        if (enemy.isAlive()) {
+                            destroyed = destroyed + enemy.ifGone(destroyed);
+                            if (enemy.getEntity().getBoundsInParent().intersects(player.getEntity().getBoundsInParent())) {
+                                if (!playerInvincible) {
+                                    player.health--;
+                                    playerInvincible = true;
+                                    invincibleCoolDown.playFromStart();
+                                }
+                            }
+                            enemy.update();
                         }
                     }
                     for (ShootingEnemies enemy : enemyList2) {
-                        if (projectile.getEntity().getBoundsInParent()
-                                .intersects(enemy.getEntity().getBoundsInParent())) {
-                            if (!projectile.isHasShot()) {
-                                if (enemy.isAlive()) {
-                                    enemy.hit(projectile);
-                                    projectile.setHasShot(true);
-                                    RemoveItem(projectile.getEntity());
-                                    destroyed++;
+                        if (enemy.isAlive()) {
+                            destroyed = destroyed + enemy.ifGone(destroyed);
+                            if (enemy.getEntity().getBoundsInParent().intersects(player.getEntity().getBoundsInParent())) {
+                                if (!playerInvincible) {
+                                    player.health--;
+                                    playerInvincible = true;
+                                    invincibleCoolDown.playFromStart();
                                 }
+                            }
+                            enemy.update();
+                        }
+                    }
+                    for (Projectile projectile : enemyProjectiles) {
+                        projectile.update();
+                        if (!projectile.isHasShot()) {
+                            if (projectile.getEntity().getBoundsInParent().intersects(player.getEntity().getBoundsInParent())) {
+                                if (!playerInvincible) {
+                                    player.health--;
+                                    playerInvincible = true;
+                                    invincibleCoolDown.playFromStart();
+                                    projectile.setHasShot(true);
+                                }
+
                             }
                         }
                     }
-                    for (PowerUp powerup : powerUps) {
-                        powerup.update();
-                    }
                     for (Asteroid asteroid : asteroids) {
-                        if (projectile.getEntity().getBoundsInParent()
-                                .intersects(asteroid.getEntity().getBoundsInParent())) {
-                            if (!projectile.isHasShot()) {
-                                if (asteroid.isAlive()) {
-                                    PowerUp test = new PowerUp(asteroid.getPosX(),asteroid.getPosY());powerUps.add(test);
-                                    asteroid.hit(projectile);
-                                    projectile.setHasShot(true);
-                                    RemoveItem(projectile.getEntity());
+                        asteroid.update();
+                    }
+                    for (Projectile projectile : projectiles) {
+                        projectile.update();
+                        for (NormalEnemies enemy : enemyList) {
+                            if (projectile.getEntity().getBoundsInParent()
+                                    .intersects(enemy.getEntity().getBoundsInParent())) {
+                                if (!projectile.isHasShot()) {
+                                    if (enemy.isAlive()) {
+                                        enemy.hit(projectile);
+                                        projectile.setHasShot(true);
+                                        RemoveItem(projectile.getEntity());
+                                        destroyed++;
+                                    }
                                 }
+                            }
+                        }
+                        for (ShootingEnemies enemy : enemyList2) {
+                            if (projectile.getEntity().getBoundsInParent()
+                                    .intersects(enemy.getEntity().getBoundsInParent())) {
+                                if (!projectile.isHasShot()) {
+                                    if (enemy.isAlive()) {
+                                        enemy.hit(projectile);
+                                        projectile.setHasShot(true);
+                                        RemoveItem(projectile.getEntity());
+                                        destroyed++;
+                                    }
+                                }
+                            }
+                        }
+                        for (PowerUp powerup : powerUps) {
+                            //powerup.update();
+                            if (powerup.getEntity().getBoundsInParent().intersects(player.getEntity().getBoundsInParent())) {
+                                if (!powerup.isObtained()) {
+                                    addPower(powerup.getType());
+
+                                    addPower(5);
+                                    powerup.setObtained(true);
+                                    RemoveItem(powerup.getEntity());
+                                }
+                            }
+                        }
+                        for (Asteroid asteroid : asteroids) {
+                            if (asteroid.getPosY() > 0) {
+                                if (projectile.getEntity().getBoundsInParent()
+                                        .intersects(asteroid.getEntity().getBoundsInParent())) {
+                                    if (!projectile.isHasShot()) {
+                                        if (asteroid.isAlive()) {
+                                            PowerUp test = new PowerUp(asteroid.getPosX() + (asteroid.getSizeX() / 2) - 15, asteroid.getPosY());
+                                            test.getSizeX();
+                                            powerUps.add(test);
+                                            asteroid.hit(projectile);
+                                            projectile.setHasShot(true);
+                                            RemoveItem(projectile.getEntity());
+                                        }
+                                    }
+                                }
+                            }
+                            if (asteroid.getPosY() > GAMEHEIGHT) {
+                                asteroid.hit(projectile);
+                                RemoveItem(asteroid.getEntity());
                             }
                         }
                     }
                 }
-
-            }
+        }
         }.start();
     }
 
+    /*
+    * Creates wave that appears on screen
+    * randomly selects a pattern for a wave
+    * */
     private void CreateWave() {
         Random rand = new Random();
         int randNum = rand.nextInt(5) + 1;
@@ -354,14 +442,23 @@ public class MainGame {
 
     }
 
+    /*
+     * Adds items to game
+     *
+     * */
     public static void AddItem(Rectangle item) {
         root.getChildren().add(item);
     }
 
-    private static boolean isDouble = true;
-    private static boolean isTriple = true;
+    private static boolean isDouble = false;
+    private static boolean isTriple = false;
     private static boolean isVertical = false;
-    private static boolean isMulti = true;
+    private static boolean isMulti = false;
+
+    /*
+    * Adds projectiles to game based on where they were created and their direction
+    * also checks based on power ups obtained
+    * */
     public static void AddProjectile(int direction , int bulletSpawn, int yPos) {
         if (isMulti) {
             if (isDouble) {
@@ -397,16 +494,48 @@ public class MainGame {
                     enemyProjectiles.add(tempProj);
                 }
             }
+        if (isVertical){
+            Projectile tempProj1 = new Projectile((bulletSpawn - 75), yPos, direction);
+            tempProj1.setLeft(true);
+            projectiles.add(tempProj1);
+            Projectile tempProj2 = new Projectile((bulletSpawn + 75), yPos, direction);
+            tempProj2.setRight(true);
+            projectiles.add(tempProj2);
+        }
 
         }
+
+    /**
+     * Removes items from the game
+     */
 
     public static void RemoveItem(Rectangle item) {
         root.getChildren().remove(item);
     }
 
+    /*
+    * Adds powerups effects
+    * */
     public void addPower(int type){
         switch (type) {
             case 1:
+                isDouble=true;
+                isMulti=true;
+                break;
+            case 2:
+                isTriple=true;
+                isMulti=true;
+                break;
+            case 3:
+                isVertical=true;
+                break;
+            case 4:
+                ProjectileStats.setFireCooldown(ProjectileStats.getFireCooldown()/2);
+                player.updateTimer();
+                break;
+            case 5:
+                ProjectileStats.setSpeed(ProjectileStats.speed * 2);
+                player.updateTimer();
                 break;
         }
     }

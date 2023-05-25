@@ -22,6 +22,10 @@ public class Shootables extends BaseEntity{
     }
     private int direction;
     private float timeSeconds = 0;
+    /*
+     * Main Constructor used for items that can shoot
+     * creates a cooldown
+     * */
     public Shootables(int sizeX, int sizeY, int posX, int poxY, int speedX, int speedY, int direction) {
         super(sizeX, sizeY, posX, poxY, speedX, speedY);
         this.direction = direction;
@@ -42,6 +46,10 @@ public class Shootables extends BaseEntity{
         cooldown=cooldown1;
     }
 
+
+    /*
+    * creates a projetile if not on cooldown
+     */
     public void Fire(int direction){
         if (!fired){
             MainGame.AddProjectile(direction,bulletSpawnX,getPosY());
@@ -50,6 +58,10 @@ public class Shootables extends BaseEntity{
         }
 
     }
+
+    /*
+    * Fires projectile as well as normal movemnt updates
+    * */
     public void Update(){
         if (firing) {
             Fire(direction);
@@ -66,6 +78,9 @@ public class Shootables extends BaseEntity{
     }
     //Shoot
 
+    /*
+    * updates timer with new value for cooldown
+    * */
     public void updateTimer(){
         Timeline cooldown1 = new Timeline();
         cooldown1.setCycleCount(3);

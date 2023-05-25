@@ -9,7 +9,9 @@ import static javafx.scene.input.KeyCode.*;
 public class Mechanics {
     //For collisions , out of bounds, spawning waves
 
-
+    /*
+     * Method used to take user input from main class and dictate output
+     * */
     public static void movePlayer(KeyCode code, Player player){
         if (code.equals(W)){
             if (player.getPosY()>0){
@@ -60,6 +62,10 @@ public class Mechanics {
         }
     }
 
+
+    /*
+    * Method used to stop output after input ended
+    * */
     public static void stopMovement(KeyCode code, Player player){
         if (code == A) {
             player.setLeft(false);
@@ -77,8 +83,5 @@ public class Mechanics {
         }
     }
 
-    public static void CreateWavePattern1(){
-
-    }
 
 }
